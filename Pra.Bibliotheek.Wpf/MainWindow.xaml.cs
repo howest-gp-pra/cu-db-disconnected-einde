@@ -10,13 +10,14 @@ namespace Pra.Bibliotheek.Wpf
 
     public partial class MainWindow : Window
     {
+        IBookService bibService;
+        bool isNew;
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        IBookService bibService;
-        bool isNew;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             bibService = new DisconnectedService();
@@ -38,12 +39,8 @@ namespace Pra.Bibliotheek.Wpf
         {
             ClearControls();
             lstBooks.ItemsSource = null;
-            Author author = null;
-            Publisher publisher = null;
-            if (cmbFilterAuthor.SelectedItem != null)
-                author = (Author)cmbFilterAuthor.SelectedItem;
-            if (cmbFilterPublisher.SelectedItem != null)
-                publisher = (Publisher)cmbFilterPublisher.SelectedItem;
+            Author author = (Author)cmbFilterAuthor.SelectedItem;
+            Publisher publisher = (Publisher)cmbFilterPublisher.SelectedItem;
             lstBooks.ItemsSource = bibService.GetBooks(author, publisher);
         }
         private void PopulateAuthors()
@@ -152,7 +149,7 @@ namespace Pra.Bibliotheek.Wpf
                 txtTitle.Focus();
             }
         }
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             ActivateLeft();
             LstBooks_SelectionChanged(null, null);
